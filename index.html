@@ -136,6 +136,15 @@
         // Show the selected panel
         const target = tab.getAttribute('data-target');
         document.getElementById(target).style.display = 'block';
+        // If switching to Confirmation tab, ensure builder and toggle are visible/enabled
+        if (target === 'confirmation-content') {
+          var toggle = document.getElementById('toggle-conditional');
+          var builder = document.getElementById('conditional-builder');
+          if (toggle && builder) {
+            toggle.checked = true;
+            builder.style.display = 'block';
+          }
+        }
       });
     });
   </script>
