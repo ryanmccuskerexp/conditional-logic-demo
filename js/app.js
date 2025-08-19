@@ -13,34 +13,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const builderContainer = document.getElementById('builder-container');
     if (builderContainer && builderContainer.children.length === 0) {
       addRule();
-    }
+  // 2. Use event delegation for “+ Add New Rule” button so it always works
+  const conditionalBuilder = document.getElementById('conditional-builder');
+  if (conditionalBuilder) {
+    conditionalBuilder.addEventListener('click', function(e) {
+      if (e.target && e.target.id === 'add-rule-btn') {
+        const builder = document.getElementById('builder-container');
+        const ruleCount = builder.querySelectorAll('.rule-block').length;
+        // Limit number of rules
+        if (ruleCount >= 3) {
+          // Show error below add button
+          let err = document.getElementById('rule-limit-error');
+          if (!err) {
+            err = document.createElement('div');
+            err.id = 'rule-limit-error';
+            err.textContent = 'You cannot add more than 3 rules';
+            err.style.color = '#c00';
+            err.style.fontSize = '0.95em';
+            err.style.marginTop = '0.5em';
+            e.target.after(err);
+          }
+          return;
+        } else {
+          const err = document.getElementById('rule-limit-error');
+          if (err) err.remove();
+        }
+        addRule();
+        checkRuleConflicts();
+      }
+    });
   }
-
-  // --- only these types are eligible for conditional logic ---
-  const formFields = [
-    { name:'experianCustomer',
-      label:'Are you a current Experian Customer?',
-      type:'radio',
-      values:['yes','no']
-    },
-    { name:'employeesCount',
-      label:'How many employees does your company have?',
-      type:'radio',
-      values:['≤100','>100']
-    },
-    { name:'permissiblePurpose',
-      label:'Do you have permissible purpose?',
-      type:'radio',
-      values:['yes','no']
-    },
-    { name:'country',
-      label:'Country',
-      type:'select',
-      values:['United States']
-    },
-    { name:'email',       label:'Email',       type:'text', values:[] },
-    { name:'firstName',   label:'First Name',  type:'text', values:[] },
-    { name:'lastName',    label:'Last Name',   type:'text', values:[] },
     { name:'company',     label:'Company',     type:'text', values:[] },
     { name:'phone',       label:'Phone',       type:'text', values:[] }
   ];
