@@ -3,11 +3,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const toggle = document.getElementById('toggle-conditional');
   const builder = document.getElementById('conditional-builder');
   if (toggle && builder) {
-    // init hidden/shown based on checkbox state
-    builder.style.display = toggle.checked ? 'block' : 'none';
+    // Show builder and enable toggle by default
+    toggle.checked = true;
+    builder.style.display = 'block';
     toggle.addEventListener('change', () => {
       builder.style.display = toggle.checked ? 'block' : 'none';
     });
+    // Add a default rule block on load
+    const builderContainer = document.getElementById('builder-container');
+    if (builderContainer && builderContainer.children.length === 0) {
+      addRule();
+    }
   }
 
   // --- only these types are eligible for conditional logic ---
