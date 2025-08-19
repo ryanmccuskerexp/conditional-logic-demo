@@ -125,26 +125,28 @@
 
   <script src="js/app.js"></script>
   <script>
-    // Tab switching logic
-    document.querySelectorAll('.tabs .tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        // Remove active from all tabs
-        document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        // Hide all tab panels
-        document.querySelectorAll('.tab-content').forEach(panel => panel.style.display = 'none');
-        // Show the selected panel
-        const target = tab.getAttribute('data-target');
-        document.getElementById(target).style.display = 'block';
-        // If switching to Confirmation tab, ensure builder and toggle are visible/enabled
-        if (target === 'confirmation-content') {
-          var toggle = document.getElementById('toggle-conditional');
-          var builder = document.getElementById('conditional-builder');
-          if (toggle && builder) {
-            toggle.checked = true;
-            builder.style.display = 'block';
+    document.addEventListener('DOMContentLoaded', function() {
+      // Tab switching logic
+      document.querySelectorAll('.tabs .tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          // Remove active from all tabs
+          document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          // Hide all tab panels
+          document.querySelectorAll('.tab-content').forEach(panel => panel.style.display = 'none');
+          // Show the selected panel
+          const target = tab.getAttribute('data-target');
+          document.getElementById(target).style.display = 'block';
+          // If switching to Confirmation tab, ensure builder and toggle are visible/enabled
+          if (target === 'confirmation-content') {
+            var toggle = document.getElementById('toggle-conditional');
+            var builder = document.getElementById('conditional-builder');
+            if (toggle && builder) {
+              toggle.checked = true;
+              builder.style.display = 'block';
+            }
           }
-        }
+        });
       });
     });
   </script>
