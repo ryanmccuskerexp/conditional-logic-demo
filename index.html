@@ -141,9 +141,14 @@
           if (target === 'confirmation-content') {
             var toggle = document.getElementById('toggle-conditional');
             var builder = document.getElementById('conditional-builder');
+            var builderContainer = document.getElementById('builder-container');
             if (toggle && builder) {
               toggle.checked = true;
               builder.style.display = 'block';
+              // If no rule block exists, add one using app.js logic
+              if (builderContainer && builderContainer.children.length === 0 && typeof window.addRule === 'function') {
+                window.addRule();
+              }
             }
           }
         });
