@@ -7,7 +7,6 @@
 </head>
 <body>
 
-  
   <div id="modal-overlay" class="modal-overlay open">
     <div class="modal-container">
 
@@ -78,7 +77,7 @@
         </div>
 
         <!-- CONFIRMATION PANEL -->
-        <div id="confirmation-content" class="tab-content" style="display:none;">
+        <div id="confirmation-content" class="tab-content" style="display:block;">
           <!-- CONFIRMATION TARGET -->
           <div class="field-group">
             <label for="confirmation-target">Confirmation target *</label>
@@ -125,92 +124,5 @@
   </div>
 
   <script src="js/app.js"></script>
-  <script>
-    // modal open/close
-    const overlay = document.getElementById('modal-overlay');
-    document.getElementById('open-modal-btn')
-      .addEventListener('click', ()=> overlay.classList.add('open'));
-    document.getElementById('close-modal-btn')
-      .addEventListener('click', ()=> overlay.classList.remove('open'));
-    document.getElementById('cancel-btn')
-      .addEventListener('click', ()=> overlay.classList.remove('open'));
-
-    // show/hide conditional-builder
-    const toggle = document.getElementById('toggle-conditional');
-    const cond   = document.getElementById('conditional-builder');
-    cond.style.display = 'none';   // start hidden
-    toggle.addEventListener('change', () => {
-      cond.style.display = toggle.checked ? 'block' : 'none';
-    });
-
-    // dynamic default-page swapping
-    const topSelect    = document.getElementById('confirmation-target');
-    const defaultGroup = document.getElementById('default-page-group');
-
-    function makePathChooser(accept, placeholder) {
-      const wrap = document.createElement('div');
-      wrap.style.display = 'flex'; wrap.style.gap = '.5em';
-
-      const txt = document.createElement('input');
-      txt.type = 'text'; txt.readOnly = true;
-      txt.placeholder = placeholder; txt.style.flex = '1';
-
-      const btn = document.createElement('button');
-      btn.type = 'button'; btn.textContent = '📁';
-      btn.onclick = () => hid.click();
-      btn.className = 'browse-btn';
-
-      const hid = document.createElement('input');
-      hid.type = 'file'; hid.accept = accept; hid.style.display = 'none';
-      hid.onchange = () => txt.value = hid.files[0]?.name || '';
-
-      wrap.append(txt, btn, hid);
-      return wrap;
-    }
-
-    function updateDefaultField() {
-      defaultGroup.innerHTML = '';
-      let lbl = document.createElement('label');
-      lbl.htmlFor = 'default-input';
-
-      let widget;
-      if (topSelect.value === 'redirect') {
-        lbl.textContent = 'Choose default confirmation page *';
-        widget = document.createElement('input');
-        widget.type = 'text'; widget.id = 'default-input';
-        widget.placeholder = 'https://';
-      }
-      else if (topSelect.value === 'modal') {
-        lbl.textContent = 'Select default modal component';
-        widget = makePathChooser('.html', 'Select .html file…');
-      }
-      else { // download
-        lbl.textContent = 'Choose default download file';
-        widget = makePathChooser('.zip', 'Select .zip file…');
-      }
-
-      defaultGroup.append(lbl, widget);
-    }
-
-    // init + re-run on change
-    updateDefaultField();
-    topSelect.addEventListener('change', () => {
-      updateDefaultField();
-      // also fire the same event so app.js re-locks all row inputs
-      topSelect.dispatchEvent(new Event('change'));
-    });
-
-    // TAB SWITCHING
-    document.querySelectorAll('.tabs .tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        // activate tab
-        document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        // show panel
-        document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
-        document.getElementById(tab.dataset.target).style.display = 'block';
-      });
-    });
-  </script>
 </body>
 </html>
