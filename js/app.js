@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const builderContainer = document.getElementById('builder-container');
     if (builderContainer && builderContainer.children.length === 0) {
       addRule();
+    } // <-- THIS WAS MISSING!
+  }
+
   // 2. Use event delegation for “+ Add New Rule” button so it always works
   const conditionalBuilder = document.getElementById('conditional-builder');
   if (conditionalBuilder) {
@@ -527,7 +530,6 @@ document.addEventListener('DOMContentLoaded', () => {
       ruleBlocks.forEach(block => {
         // Remove previous errors
         block.querySelectorAll('.action-error, .condition-error, .conflict-error, .min-condition-error').forEach(e => e.remove());
-        // ...existing code...
         // Check action
         const actionRow = block.querySelector('.actions .row');
         let validAction = false;
