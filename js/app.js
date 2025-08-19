@@ -46,8 +46,18 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-    { name:'company',     label:'Company',     type:'text', values:[] },
-    { name:'phone',       label:'Phone',       type:'text', values:[] }
+  
+  // --- FIX: define formFields correctly (was broken/malformed here) ---
+  const formFields = [
+    { name: 'experianCustomer', label: 'Are you a current Experian Customer?', type: 'radio', values: ['yes','no'] },
+    { name: 'employeesCount',   label: 'How many employees does your company have?', type: 'radio', values: ['≤100','>100'] },
+    { name: 'permissiblePurpose', label: 'Do you have permissible purpose?', type: 'radio', values: ['yes','no'] },
+    { name: 'country',          label: 'Country', type: 'select', values: ['United States','Canada','United Kingdom','Australia','Germany','France','India','Brazil','Japan','Mexico'] },
+    { name: 'email',            label: 'Email', type: 'text', values: [] },
+    { name: 'firstName',        label: 'First Name', type: 'text', values: [] },
+    { name: 'lastName',         label: 'Last Name', type: 'text', values: [] },
+    { name: 'company',          label: 'Company', type: 'text', values: [] },
+    { name: 'phone',            label: 'Phone', type: 'text', values: [] }
   ];
 
   // only keep non‐open‐text fields
