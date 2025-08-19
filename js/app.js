@@ -1,7 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
+  console.debug('[app.js] DOMContentLoaded');
+
   // 1. Toggle builder visibility with the correct ID
   const toggle = document.getElementById('toggle-conditional');
   const builder = document.getElementById('conditional-builder');
+  console.debug('[app.js] toggle:', !!toggle, ', builder:', !!builder);
+
   if (toggle && builder) {
     // Show builder and enable toggle by default
     toggle.checked = true;
@@ -11,42 +15,58 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     // Add a default rule block on load
     const builderContainer = document.getElementById('builder-container');
+    console.debug('[app.js] builderContainer children:', builderContainer ? builderContainer.children.length : 'no container');
     if (builderContainer && builderContainer.children.length === 0) {
+      console.debug('[app.js] calling addRule() on load');
       addRule();
     } // <-- THIS WAS MISSING!
   }
 
   // 2. Use event delegation for “+ Add New Rule” button so it always works
   const conditionalBuilder = document.getElementById('conditional-builder');
+  console.debug('[app.js] conditionalBuilder found:', !!conditionalBuilder);
   if (conditionalBuilder) {
     conditionalBuilder.addEventListener('click', function(e) {
-      if (e.target && e.target.id === 'add-rule-btn') {
-        const builder = document.getElementById('builder-container');
-        const ruleCount = builder.querySelectorAll('.rule-block').length;
-        // Limit number of rules
-        if (ruleCount >= 3) {
-          // Show error below add button
-          let err = document.getElementById('rule-limit-error');
-          if (!err) {
-            err = document.createElement('div');
-            err.id = 'rule-limit-error';
-            err.textContent = 'You cannot add more than 3 rules';
-            err.style.color = '#c00';
-            err.style.fontSize = '0.95em';
-            err.style.marginTop = '0.5em';
-            e.target.after(err);
-          }
-          return;
-        } else {
-          const err = document.getElementById('rule-limit-error');
-          if (err) err.remove();
-        }
-        addRule();
-        checkRuleConflicts();
+      // robust: handle clicks on inner nodes (text/icon)
+      const clickedBtn = (e.target && (e.target.id === 'add-rule-btn')) ? e.target : (e.target && e.target.closest ? e.target.closest('#add-rule-btn') : null);
+      if (!clickedBtn) return;
+      console.debug('[app.js] delegated click on #add-rule-btn');
+
+      const builder = document.getElementById('builder-container');
+      if (!builder) {
+        console.error('[app.js] builder-container not found');
+        return;
       }
+      const ruleCount = builder.querySelectorAll('.rule-block').length;
+      console.debug('[app.js] current ruleCount:', ruleCount);
+
+      // Limit number of rules
+      if (ruleCount >= 3) {
+        // Show error below add button
+        let err = document.getElementById('rule-limit-error');
+        if (!err) {
+          err = document.createElement('div');
+          err.id = 'rule-limit-error';
+          err.textContent = 'You cannot add more than 3 rules';
+          err.style.color = '#c00';
+          err.style.fontSize = '0.95em';
+          err.style.marginTop = '0.5em';
+          clickedBtn.after(err);
+        }
+        return;
+      } else {
+        const err = document.getElementById('rule-limit-error');
+        if (err) err.remove();
+      }
+      console.debug('[app.js] calling addRule() from delegated handler');
+      addRule();
+      checkRuleConflicts();
     });
   }
-  
+
+  // log whether addRule is available globally
+  console.debug('[app.js] window.addRule present:', typeof window.addRule === 'function');
+
   // --- FIX: define formFields correctly (was broken/malformed here) ---
   const formFields = [
     { name: 'experianCustomer', label: 'Are you a current Experian Customer?', type: 'radio', values: ['yes','no'] },
