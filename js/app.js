@@ -364,6 +364,9 @@ document.addEventListener('DOMContentLoaded', () => {
     block.addEventListener('change', checkRuleConflicts, true);
   }
 
+  // Expose addRule globally so inline scripts can call it
+  window.addRule = addRule;
+
   // Helper: get conditions and action for a rule block
   function getRuleData(block) {
     const conds = [];
